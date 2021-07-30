@@ -8,16 +8,20 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
-public class MyIntentService extends IntentService {
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
-    int price, month, date, hour, minute;
-    String place, permit;
+public class MyIntentService extends IntentService {
+    String year, month, date, hour, minute, price, place, permit;
 
     public MyIntentService() {
         super("MyIntentService");
@@ -31,13 +35,22 @@ public class MyIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
+        DBHelper helper = new DBHelper(this);
+        SQLiteDatabase db = helper.getWritableDatabase();
+
         String content = intent.getStringExtra("Content");
         String[] contentParse = content.split("\n");
+
+        Date currentTime = Calendar.getInstance().getTime();
+        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy", Locale.getDefault());
+        year = yearFormat.format(currentTime);
+
         if(contentParse.length==6 && contentParse[5].contains("사용")){
             parseDate(contentParse[3]);
             parsePrice(contentParse[4]);
             parsePlace(contentParse[5]);
-
+            db.execSQL("insert into tb_card(year, month, date, hour, minute, place, price, permit) values(?,?,?,?,?,?,?,?)",
+                    new String[]{year, month, date, hour, minute, place, price, permit});
         }else if(contentParse.length==7 && contentParse[6].contains("승인취소")){
             parseDate(contentParse[3]);
             parsePrice(contentParse[4]);
@@ -77,19 +90,21 @@ public class MyIntentService extends IntentService {
         Notification notification=builder.build();
         notificationManager.notify(1, notification);
          */
-        //Log.d("aaaaa",""+price+","+month+","+date+","+hour+","+minute+","+place+","+permit);
+        //Log.d("aaaaa",""+year+","+price+","+month+","+date+","+hour+","+minute+","+place+","+permit);
+
+        db.close();
     }
 
     public void parsePrice(String s){
         String[] prices = s.split("원");
-        price = Integer.parseInt(prices[0].replace(",",""));
+        price = prices[0].replace(",","");
     }
 
     public void parseDate(String s){
-        month = Integer.parseInt(s.substring(0,2));
-        date = Integer.parseInt(s.substring(3,5));
-        hour = Integer.parseInt(s.substring(6,8));
-        minute = Integer.parseInt(s.substring(9,11));
+        month = s.substring(0,2);
+        date = s.substring(3,5);
+        hour = s.substring(6,8);
+        minute = s.substring(9,11);
     }
 
     public void parsePlace(String s){

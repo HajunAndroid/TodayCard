@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Build;
@@ -56,6 +57,12 @@ public class MyIntentService extends IntentService {
             parsePrice(contentParse[4]);
             place = contentParse[5];
             permit = "승인취소";
+
+            Cursor c = db.rawQuery("select _id from tb_card where place = ?", new String[] { place });
+            if (c.moveToLast()){
+                String id = c.getString(0);
+                db.execSQL("Delete from tb_card where _id = "+id);
+            }
         }
         /*
         SharedPreferences sharedPreferences = getSharedPreferences("my_prefs",Context.MODE_PRIVATE);

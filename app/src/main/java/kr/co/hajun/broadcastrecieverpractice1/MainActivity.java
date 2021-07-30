@@ -13,30 +13,18 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     boolean receiveSMSPermission;
-    TextView tv_sender;
-    TextView tv_date;
-    TextView tv_content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS)== PackageManager.PERMISSION_GRANTED){
             receiveSMSPermission = true;
         }
-
         if(!receiveSMSPermission){
             ActivityCompat.requestPermissions(this,new String[]{
                     Manifest.permission.RECEIVE_SMS},200);
         }
-
-        tv_sender = findViewById(R.id.textView);
-        tv_date = findViewById(R.id.textView2);
-        tv_content = findViewById(R.id.textView3);
-
-        Intent intent = getIntent();
-        processCommand(intent);
     }
 
     @Override
@@ -48,21 +36,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        processCommand(intent);
-    }
-
-    private void processCommand(Intent intent){
-        if(intent != null){
-            String sender = intent.getStringExtra("sender");
-            String date = intent.getStringExtra("date");
-            String content = intent.getStringExtra("content");
-
-            tv_sender.setText(sender);
-            tv_date.setText(date);
-            tv_content.setText(content);
-        }
-    }
 }

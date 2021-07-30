@@ -3,6 +3,8 @@ package kr.co.hajun.broadcastrecieverpractice1;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.SmsMessage;
@@ -12,24 +14,26 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MyReceiver extends BroadcastReceiver {
-    private static final String TAG = "SMSReceiver";
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG,"onReceive() called");
-
+        /*
+        if (Intent.ACTION_DATE_CHANGED.equals(intent.getAction())) {
+            SharedPreferences sharedPreferences = context.getSharedPreferences("my_prefs",Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("defaultSum",0);
+            editor.commit();
+            Log.d("change","change");
+        }*/
         Bundle bundle = intent.getExtras();
         SmsMessage[] messages = parseSmsMessage(bundle);
-
-        if(messages.length > 0){
+        if (messages.length > 0) {
             String sender = messages[0].getOriginatingAddress();
-            String content = messages[0].getMessageBody().toString();
-            Date date = new Date(messages[0].getTimestampMillis());
-
-            Log.d(TAG, "sender: " + sender);
-            Log.d(TAG,"content:" + content);
-            Log.d(TAG,"date: " + date);
-
-            sendToActivity(context,sender,content,date);
+            if(sender.equals("15881688")) {
+                String content = messages[0].getMessageBody().toString();
+                Intent intentToService = new Intent(context, MyIntentService.class);
+                intentToService.putExtra("Content", content);
+                context.startService(intentToService);
+            }
         }
     }
 
@@ -42,16 +46,4 @@ public class MyReceiver extends BroadcastReceiver {
         return messages;
     }
 
-    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    private void sendToActivity(Context context, String sender, String content, Date date){
-        Intent intent = new Intent(context, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|
-                Intent.FLAG_ACTIVITY_SINGLE_TOP|
-                Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("sender",sender);
-        intent.putExtra("content",content);
-        intent.putExtra("date",format.format(date));
-        context.startActivity(intent);
-    }
 }

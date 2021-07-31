@@ -1,13 +1,16 @@
 package kr.co.hajun.broadcastrecieverpractice1;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -15,13 +18,21 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.DatePicker;
+
+import com.google.android.material.tabs.TabLayout;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     boolean receiveSMSPermission;
-
+    Calendar calendar = Calendar.getInstance();
+    int nYear = calendar.get(Calendar.YEAR);
+    int nMonth = calendar.get(Calendar.MONTH)+1;
+    int nDay = calendar.get(Calendar.DAY_OF_MONTH);
+    ViewPager viewPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +41,11 @@ public class MainActivity extends AppCompatActivity {
         Toolbar tb = (Toolbar) findViewById(R.id.app_toolbar);
         setSupportActionBar(tb);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        viewPager = findViewById(R.id.viewPager);
+        viewPager.setAdapter(new pagerAdapter(getSupportFragmentManager()));
+        TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
 
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS)== PackageManager.PERMISSION_GRANTED){
             receiveSMSPermission = true;
@@ -67,20 +83,6 @@ public class MainActivity extends AppCompatActivity {
                 receiveSMSPermission = true;
         }
     }
-    /*
-    public void btnMethod(View view){
-        try {
-            Intent intent = getIntent();
-            finish();
-            overridePendingTransition(0, 0);
-            startActivity(intent);
-            overridePendingTransition(0, 0);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-    */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -92,19 +94,70 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_calender:
-                ((TextView)findViewById(R.id.textView)).setText("CALENDAR");
+                setCalender();
                 return true;
             case R.id.action_refresh:
-                ((TextView)findViewById(R.id.textView)).setText("REFRESH");
+                reFresh();
                 return true;
             case R.id.action_search:
-                ((TextView)findViewById(R.id.textView)).setText("SEARCH");
+                //((TextView)findViewById(R.id.textView)).setText("SEARCH");
                 return true;
             case R.id.action_settings:
-                ((TextView)findViewById(R.id.textView)).setText("SETTINGS");
+                //((TextView)findViewById(R.id.textView)).setText("SETTINGS");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void setCalender(){
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                nYear = i;
+                nMonth = i1+1;
+                nDay = i2;
+                //((TextView)findViewById(R.id.textView)).setText(nYear+","+nMonth+","+nDay);
+            }
+        },nYear,nMonth-1,nDay);
+        datePickerDialog.show();
+    }
+
+    public void reFresh(){
+        try {
+            Intent intent = getIntent();
+            finish();
+            overridePendingTransition(0, 0);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    class pagerAdapter extends FragmentPagerAdapter{
+        List<Fragment> fragments = new ArrayList<Fragment>();
+        private String titles[] = new String[]{"오늘","일별","주별","월별"};
+        public pagerAdapter(FragmentManager fm){
+            super(fm);
+            fragments.add(new TodayFragment());
+            fragments.add(new DayFragment());
+            fragments.add(new WeekFragment());
+            fragments.add(new MonthFragment());
+        }
+        @Override
+        public Fragment getItem(int position) {
+            return this.fragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return this.fragments.size();
+        }
+        @Override
+        public CharSequence getPageTitle(int position){
+            return titles[position];
         }
     }
 }

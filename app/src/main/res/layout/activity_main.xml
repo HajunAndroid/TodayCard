@@ -7,11 +7,48 @@
     tools:context=".MainActivity"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView1"
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
+        android:layout_height="?attr/actionBarSize"
+        android:background="#ffffff"
+        android:id="@+id/app_toolbar" />
+    <!--
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/buttonDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="< 2021년 7월 >"
+                android:textSize="18dp"/>
+            <Button
+                android:id="@+id/buttonSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/buttonDate"
+                android:layout_toLeftOf="@+id/buttonSetUp"
+                android:text="찾기"
+                android:textSize="18dp"/>
+            <Button
+                android:id="@+id/buttonSetUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignBaseline="@id/buttonDate"
+                android:text="설정"
+                android:textSize="18dp"/>
+        </RelativeLayout>
+           -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="48sp"
+        android:gravity="center"
+        android:id="@+id/textView"
+        android:text="TEXT"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 </LinearLayout>

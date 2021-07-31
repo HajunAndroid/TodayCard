@@ -58,7 +58,7 @@ public class MyIntentService extends IntentService {
             place = contentParse[5];
             permit = "승인취소";
 
-            Cursor c = db.rawQuery("select _id from tb_card where place = ?", new String[] { place });
+            Cursor c = db.rawQuery("select _id from tb_card where place = ? and price = ?", new String[] { place, price });
             if (c.moveToLast()){
                 String id = c.getString(0);
                 db.execSQL("Delete from tb_card where _id = "+id);

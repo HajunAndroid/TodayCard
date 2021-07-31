@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar tb = (Toolbar) findViewById(R.id.app_toolbar);
         setSupportActionBar(tb);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
+        //getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setTitle(""+nYear+"."+nMonth+"."+nDay);
         viewPager = findViewById(R.id.viewPager);
         viewPager.setAdapter(new pagerAdapter(getSupportFragmentManager()));
         TabLayout tabLayout = findViewById(R.id.tabs);
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 nYear = i;
                 nMonth = i1+1;
                 nDay = i2;
-                //((TextView)findViewById(R.id.textView)).setText(nYear+","+nMonth+","+nDay);
+                getSupportActionBar().setTitle(""+nYear+"."+nMonth+"."+nDay);
             }
         },nYear,nMonth-1,nDay);
         datePickerDialog.show();

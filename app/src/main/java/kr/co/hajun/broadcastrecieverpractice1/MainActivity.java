@@ -176,10 +176,12 @@ public class MainActivity extends AppCompatActivity {
                 //((TextView)findViewById(R.id.textView)).setText("SEARCH");
                 return true;
             case R.id.changeLimit:
-                Intent intent = new Intent(this,ChangeLimit.class);
-                startActivity(intent);
+                Intent intentChange = new Intent(this,ChangeLimit.class);
+                startActivity(intentChange);
                 return true;
             case R.id.writeSelf:
+                Intent intentPut = new Intent(this, PutSpend.class);
+                startActivity(intentPut);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

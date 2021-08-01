@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BroadCastRecieverPractice1">
-        <activity android:name=".ChangeLimit"></activity>
+        <activity android:name=".PutSpend"></activity>
+        <activity android:name=".ChangeLimit" />
 
         <service
             android:name=".MyIntentService"

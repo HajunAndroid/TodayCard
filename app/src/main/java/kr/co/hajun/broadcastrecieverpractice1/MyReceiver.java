@@ -16,14 +16,6 @@ import java.util.Date;
 public class MyReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        /*
-        if (Intent.ACTION_DATE_CHANGED.equals(intent.getAction())) {
-            SharedPreferences sharedPreferences = context.getSharedPreferences("my_prefs",Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt("defaultSum",0);
-            editor.commit();
-            Log.d("change","change");
-        }*/
         Bundle bundle = intent.getExtras();
         SmsMessage[] messages = parseSmsMessage(bundle);
         if (messages.length > 0) {

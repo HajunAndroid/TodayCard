@@ -15,6 +15,7 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -97,7 +98,6 @@ public class MyIntentService extends IntentService {
         Notification notification=builder.build();
         notificationManager.notify(1, notification);
          */
-        //Log.d("aaaaa",""+year+","+price+","+month+","+date+","+hour+","+minute+","+place+","+permit);
 
         db.close();
     }
@@ -108,8 +108,18 @@ public class MyIntentService extends IntentService {
     }
 
     public void parseDate(String s){
-        month = s.substring(0,2);
-        date = s.substring(3,5);
+        if(s.substring(0,1).equals("0")){
+            month = s.substring(1,2);
+        }else{
+            month = s.substring(0,2);
+        }
+        Log.d("price","in"+month);
+        if(s.substring(3,4).equals("0")){
+            date = s.substring(4,5);
+        }else{
+            date = s.substring(3,5);
+        }
+        Log.d("price","in"+date);
         hour = s.substring(6,8);
         minute = s.substring(9,11);
     }

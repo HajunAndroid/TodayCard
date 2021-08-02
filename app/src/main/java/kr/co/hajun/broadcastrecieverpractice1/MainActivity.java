@@ -173,7 +173,8 @@ public class MainActivity extends AppCompatActivity {
                 reFresh();
                 return true;
             case R.id.action_search:
-                //((TextView)findViewById(R.id.textView)).setText("SEARCH");
+                Intent intentSearch = new Intent(this, Search.class);
+                startActivity(intentSearch);
                 return true;
             case R.id.changeLimit:
                 Intent intentChange = new Intent(this,ChangeLimit.class);
@@ -216,18 +217,20 @@ public class MainActivity extends AppCompatActivity {
 
     class pagerAdapter extends FragmentPagerAdapter{
         List<Fragment> fragments = new ArrayList<Fragment>();
-        private String titles[] = new String[]{"오늘","일별"/*,"주별","월별"*/};
+        private String titles[] = new String[]{"오늘","상세내역"/*,"주별","월별"*/};
         public pagerAdapter(FragmentManager fm){
             super(fm);
             //Log.d("lifecylce","setAdapter");
             TodayFragment todayFragment = new TodayFragment();
+            DayFragment dayFragment = new DayFragment();
             Bundle bundle = new Bundle(3);
             bundle.putInt("year",nYear);
             bundle.putInt("month",nMonth);
             bundle.putInt("day",nDay);
             todayFragment.setArguments(bundle);
+            dayFragment.setArguments(bundle);
             fragments.add(todayFragment);
-            fragments.add(new DayFragment());
+            fragments.add(dayFragment);
             //fragments.add(new WeekFragment());
             //fragments.add(new MonthFragment());
         }

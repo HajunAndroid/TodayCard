@@ -11,9 +11,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BroadCastRecieverPractice1">
-        <activity android:name=".Search"></activity>
-        <activity android:name=".PutSpend" />
-        <activity android:name=".ChangeLimit" />
+        <activity
+            android:name=".Search"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".PutSpend"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ChangeLimit"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".MyIntentService"
@@ -28,7 +34,10 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

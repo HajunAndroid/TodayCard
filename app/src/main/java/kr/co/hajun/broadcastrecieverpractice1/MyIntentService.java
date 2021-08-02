@@ -59,46 +59,25 @@ public class MyIntentService extends IntentService {
             place = contentParse[5];
             permit = "승인취소";
 
-            Cursor c = db.rawQuery("select _id from tb_card where place = ? and price = ?", new String[] { place, price });
+            Cursor c = db.rawQuery("select _id from tb_card where place = ? and price = ?",
+                    new String[] { place, price });
             if (c.moveToLast()){
                 String id = c.getString(0);
                 db.execSQL("Delete from tb_card where _id = "+id);
             }
         }
-        /*
-        SharedPreferences sharedPreferences = getSharedPreferences("my_prefs",Context.MODE_PRIVATE);
-        int sumData = sharedPreferences.getInt("defaultSum",0);
-
-        NotificationManager notificationManager=(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder builder= null;
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            String channelID="channel_01";
-            String channelName="MyChannel01";
-            NotificationChannel channel= new NotificationChannel(channelID,channelName,NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(channel);
-            builder=new NotificationCompat.Builder(this, channelID);
-        }else{
-            builder= new NotificationCompat.Builder(this);
+        int total = 0;
+        Cursor c = db.rawQuery("select price from tb_card where year = ? and month = ? and date = ?",
+                new String[] {year, month, date});
+        while(c.moveToNext()){
+            String price = c.getString(0);
+            total += Integer.parseInt(price);
         }
-        builder.setSmallIcon(android.R.drawable.ic_menu_view);
-        builder.setContentTitle("오늘의카드");//알림창 제목
-
-        String[] price = contentParse[4].split("원");
-        int sum = Integer.parseInt(price[0].replace(",","")) + sumData;
-        builder.setContentText("방금 사용한 금액:"+sum);
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("defaultSum",sum);
-        editor.commit();
-
-        Intent intentToActivity = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,10,intentToActivity,PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
-
-        Notification notification=builder.build();
-        notificationManager.notify(1, notification);
-         */
-
+        SharedPreferences sharedPreferences =getSharedPreferences("spendLimit",MODE_PRIVATE);
+        int limit = sharedPreferences.getInt("limit",30000);
+        if(total>limit){
+            callNotification(limit);
+        }
         db.close();
     }
 
@@ -130,4 +109,26 @@ public class MyIntentService extends IntentService {
         permit = "승인";
     }
 
+    public void callNotification(int limit){
+        NotificationManager notificationManager=(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder builder= null;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            String channelID="channelIdCard";
+            String channelName="channelNameCard";
+            NotificationChannel channel= new NotificationChannel(channelID,channelName,NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(channel);
+            builder=new NotificationCompat.Builder(this, channelID);
+        }else{
+            builder= new NotificationCompat.Builder(this);
+        }
+        builder.setSmallIcon(android.R.drawable.ic_dialog_alert);
+        builder.setContentText("당일 사용 한도 "+limit+"을 초과했습니다");
+
+        Intent intentToActivity = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,10,intentToActivity,PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+
+        Notification notification = builder.build();
+        notificationManager.notify(1,notification);
+    }
 }

@@ -97,55 +97,56 @@ public class MainActivity extends AppCompatActivity {
         */
         //Log.d("lifecylce","mainOnCreate");
     }
+
     /*
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d("lifecylce","mainOnStart");
-    }
+        @Override
+        protected void onStart() {
+            super.onStart();
+            Log.d("lifecylce","mainOnStart");
+        }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("lifecylce","mainOnResume");
-    }
+        @Override
+        protected void onResume() {
+            super.onResume();
+            Log.d("lifecylce","mainOnResume");
+        }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d("lifecylce","mainOnPause");
-    }
+        @Override
+        protected void onPause() {
+            super.onPause();
+            Log.d("lifecylce","mainOnPause");
+        }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d("lifecylce","mainOnStop()");
-    }
+        @Override
+        protected void onStop() {
+            super.onStop();
+            Log.d("lifecylce","mainOnStop()");
+        }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.d("lifecylce","mainOnSaveInstanceState");
-    }
+        @Override
+        public void onSaveInstanceState(Bundle outState) {
+            super.onSaveInstanceState(outState);
+            Log.d("lifecylce","mainOnSaveInstanceState");
+        }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d("lifecylce","mainOnDestroy");
-    }
+        @Override
+        protected void onDestroy() {
+            super.onDestroy();
+            Log.d("lifecylce","mainOnDestroy");
+        }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.d("lifecylce","mainOnRestart");
-    }
+        @Override
+        protected void onRestart() {
+            super.onRestart();
+            Log.d("lifecylce","mainOnRestart");
+        }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        Log.d("lifecylce","mainOnRestoreInstanceState");
-    }
-    */
+        @Override
+        protected void onRestoreInstanceState(Bundle savedInstanceState) {
+            super.onRestoreInstanceState(savedInstanceState);
+            Log.d("lifecylce","mainOnRestoreInstanceState");
+        }
+        */
     @Override
     public void onRequestPermissionsResult(int requestCode,String[] permissions,int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

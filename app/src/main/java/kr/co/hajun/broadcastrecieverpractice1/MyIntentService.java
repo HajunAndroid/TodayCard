@@ -76,7 +76,13 @@ public class MyIntentService extends IntentService {
         SharedPreferences sharedPreferences =getSharedPreferences("spendLimit",MODE_PRIVATE);
         int limit = sharedPreferences.getInt("limit",30000);
         if(total>limit){
-            callNotification(limit);
+            Calendar calendar = Calendar.getInstance();
+            int nYear = calendar.get(Calendar.YEAR);
+            int nMonth = calendar.get(Calendar.MONTH)+1;
+            int nDay = calendar.get(Calendar.DAY_OF_MONTH);
+            if((year.equals(nYear+""))&&(month.equals(nMonth+""))&&(date.equals(nDay+""))) {
+                callNotification(limit);
+            }
         }
         db.close();
     }
@@ -127,6 +133,7 @@ public class MyIntentService extends IntentService {
         Intent intentToActivity = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,10,intentToActivity,PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
+        builder.setAutoCancel(true);
 
         Notification notification = builder.build();
         notificationManager.notify(1,notification);

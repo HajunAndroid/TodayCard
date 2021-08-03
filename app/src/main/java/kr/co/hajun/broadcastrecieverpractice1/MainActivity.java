@@ -1,6 +1,5 @@
 package kr.co.hajun.broadcastrecieverpractice1;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -8,23 +7,16 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
@@ -53,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(new pagerAdapter(getSupportFragmentManager()));
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS)== PackageManager.PERMISSION_GRANTED){
             receiveSMSPermission = true;
         }
@@ -75,12 +66,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.appbar_action,menu);
+        SharedPreferences sharedPreferences = getSharedPreferences("my_notification",MODE_PRIVATE);
+        if(sharedPreferences.getString("noti","on").equals("on")){
+            menu.getItem(0).setIcon(R.drawable.baseline_notifications_active_black_24dp);
+        }else{
+            menu.getItem(0).setIcon(R.drawable.baseline_notifications_off_black_24dp);
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case R.id.action_notification:
+                setNotificationIcon(item);
+                return true;
             case R.id.action_refresh:
                 reFresh();
                 return true;
@@ -111,6 +111,20 @@ public class MainActivity extends AppCompatActivity {
         catch (Exception e){
             e.printStackTrace();
         }
+    }
+    public void setNotificationIcon(MenuItem item){
+        SharedPreferences sharedPreferences = getSharedPreferences("my_notification", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        if(sharedPreferences.getString("noti","on").equals("on")){
+            editor.putString("noti","off");
+            item.setIcon(R.drawable.baseline_notifications_off_black_24dp);
+            Toast.makeText(this,"알림 OFF.",Toast.LENGTH_SHORT).show();
+        }else{
+            editor.putString("noti","on");
+            item.setIcon(R.drawable.baseline_notifications_active_black_24dp);
+            Toast.makeText(this,"알림 ON.",Toast.LENGTH_SHORT).show();
+        }
+        editor.commit();
     }
 
     class pagerAdapter extends FragmentPagerAdapter{

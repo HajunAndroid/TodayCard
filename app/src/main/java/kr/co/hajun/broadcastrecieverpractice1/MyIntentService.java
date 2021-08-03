@@ -17,6 +17,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -53,6 +54,11 @@ public class MyIntentService extends IntentService {
             parsePlace(contentParse[5]);
             db.execSQL("insert into tb_card(year, month, date, hour, minute, place, price, permit) values(?,?,?,?,?,?,?,?)",
                     new String[]{year, month, date, hour, minute, place, price, permit});
+
+            SharedPreferences sharedPreferencesNotification = getSharedPreferences("my_notification",MODE_PRIVATE);
+            if(sharedPreferencesNotification.getString("noti","on").equals("on")) {
+                checkingNotification(db);
+            }
         }else if(contentParse.length==7 && contentParse[6].contains("승인취소")){
             parseDate(contentParse[3]);
             parsePrice(contentParse[4]);
@@ -64,24 +70,6 @@ public class MyIntentService extends IntentService {
             if (c.moveToLast()){
                 String id = c.getString(0);
                 db.execSQL("Delete from tb_card where _id = "+id);
-            }
-        }
-        int total = 0;
-        Cursor c = db.rawQuery("select price from tb_card where year = ? and month = ? and date = ?",
-                new String[] {year, month, date});
-        while(c.moveToNext()){
-            String price = c.getString(0);
-            total += Integer.parseInt(price);
-        }
-        SharedPreferences sharedPreferences =getSharedPreferences("spendLimit",MODE_PRIVATE);
-        int limit = sharedPreferences.getInt("limit",30000);
-        if(total>limit){
-            Calendar calendar = Calendar.getInstance();
-            int nYear = calendar.get(Calendar.YEAR);
-            int nMonth = calendar.get(Calendar.MONTH)+1;
-            int nDay = calendar.get(Calendar.DAY_OF_MONTH);
-            if((year.equals(nYear+""))&&(month.equals(nMonth+""))&&(date.equals(nDay+""))) {
-                callNotification(limit);
             }
         }
         db.close();
@@ -115,7 +103,28 @@ public class MyIntentService extends IntentService {
         permit = "승인";
     }
 
-    public void callNotification(int limit){
+    public void checkingNotification(SQLiteDatabase db){
+        int total = 0;
+        Cursor c = db.rawQuery("select price from tb_card where year = ? and month = ? and date = ?",
+                new String[] {year, month, date});
+        while(c.moveToNext()){
+            String price = c.getString(0);
+            total += Integer.parseInt(price);
+        }
+        SharedPreferences sharedPreferences = getSharedPreferences("spendLimit", MODE_PRIVATE);
+        int limit = sharedPreferences.getInt("limit", 30000);
+        if (total > limit) {
+            Calendar calendar = Calendar.getInstance();
+            int nYear = calendar.get(Calendar.YEAR);
+            int nMonth = calendar.get(Calendar.MONTH) + 1;
+            int nDay = calendar.get(Calendar.DAY_OF_MONTH);
+            if ((year.equals(nYear + "")) && (month.equals(nMonth + "")) && (date.equals(nDay + ""))) {
+                callNotification(limit,total);
+            }
+        }
+    }
+
+    public void callNotification(int limit, int total){
         NotificationManager notificationManager=(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder= null;
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
@@ -127,8 +136,10 @@ public class MyIntentService extends IntentService {
         }else{
             builder= new NotificationCompat.Builder(this);
         }
+        DecimalFormat df = new DecimalFormat("###,###");
+
         builder.setSmallIcon(R.drawable.baseline_payment_black_24dp);
-        builder.setContentText("당일 사용 한도 "+limit+"을 초과했습니다");
+        builder.setContentText("당일 사용 한도 "+df.format(limit)+"원 초과 / 누적 사용액 "+df.format(total)+"원");
 
         Intent intentToActivity = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,10,intentToActivity,PendingIntent.FLAG_UPDATE_CURRENT);

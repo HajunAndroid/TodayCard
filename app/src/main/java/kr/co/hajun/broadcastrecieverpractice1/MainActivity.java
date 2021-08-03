@@ -118,18 +118,18 @@ public class MainActivity extends AppCompatActivity {
         if(sharedPreferences.getString("noti","on").equals("on")){
             editor.putString("noti","off");
             item.setIcon(R.drawable.baseline_notifications_off_black_24dp);
-            Toast.makeText(this,"알림 OFF.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"알림 off",Toast.LENGTH_SHORT).show();
         }else{
             editor.putString("noti","on");
             item.setIcon(R.drawable.baseline_notifications_active_black_24dp);
-            Toast.makeText(this,"알림 ON.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"알림 on",Toast.LENGTH_SHORT).show();
         }
         editor.commit();
     }
 
     class pagerAdapter extends FragmentPagerAdapter{
         List<Fragment> fragments = new ArrayList<Fragment>();
-        private String titles[] = new String[]{"오늘","상세내역"/*,"주별","월별"*/};
+        private String titles[] = new String[]{"오늘","상세내역"};
         public pagerAdapter(FragmentManager fm){
             super(fm);
             TodayFragment todayFragment = new TodayFragment();

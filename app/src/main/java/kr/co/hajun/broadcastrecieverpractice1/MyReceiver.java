@@ -20,8 +20,8 @@ public class MyReceiver extends BroadcastReceiver {
         SmsMessage[] messages = parseSmsMessage(bundle);
         if (messages.length > 0) {
             String sender = messages[0].getOriginatingAddress();
-            //if(sender.equals("030309487411")){
-            if(sender.equals("15881688")) {
+            if(sender.equals("15881688") || sender.equals("030309487411")){
+            //if(sender.equals("15881688")) {
                 String content = messages[0].getMessageBody().toString();
                 Intent intentToService = new Intent(context, MyIntentService.class);
                 intentToService.putExtra("Content", content);

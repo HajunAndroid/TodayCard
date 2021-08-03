@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    tools:context=".Search">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/close"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:background="#ffffff"
+            android:onClick="btnBack"
+            android:src="@drawable/baseline_arrow_back_black_24dp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
+        <TextView
+            android:id="@+id/whenStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25dp"
+            android:text="검색일"
+            android:layout_marginLeft="70dp"/>
+
+        <TextView
+            android:id="@+id/spendWhenStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/whenStart"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="70dp"
+            android:textColor="#000000"
+            android:text=""
+            android:textSize="25dp">
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/selectDayStart"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:background="#ffffff"
+            android:onClick="startDay"
+            android:src="@drawable/baseline_calendar_today_black_24dp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <ImageButton
+            android:id="@+id/searching"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:background="#ffffff"
+            android:onClick="btnSearch"
+            android:src="@drawable/baseline_done_black_24dp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
+        <TextView
+            android:id="@+id/total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25dp"
+            android:text="총 사용액"
+            android:layout_marginLeft="70dp"/>
+
+        <TextView
+            android:id="@+id/totalPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/total"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="70dp"
+            android:textColor="#000000"
+            android:text=""
+            android:textSize="25dp">
+        </TextView>
+    </RelativeLayout>
+</LinearLayout>

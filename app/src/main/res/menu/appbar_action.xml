@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_notification"
+        android:icon="@drawable/baseline_notifications_active_black_24dp"
+        android:title="Notification"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_refresh"
+        android:icon="@drawable/baseline_cached_black_24dp"
+        android:title="refresh"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/baseline_search_black_24dp"
+        android:title="Search"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/baseline_settings_black_24dp"
+        android:title="Settings"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/changeLimit"
+                android:title="한도변경"/>
+            <item
+                android:id="@+id/writeSelf"
+                android:title="직접입력"/>
+        </menu>
+    </item>
+
+</menu>

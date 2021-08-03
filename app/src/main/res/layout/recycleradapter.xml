@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    android:id="@+id/itemLayout">
+    <TextView
+        android:id="@+id/place"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="배달의민족"
+        android:textSize="18dp"
+        android:textColor="#000000"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="15dp"
+        android:gravity="center_vertical"/>
+    <TextView
+        android:id="@+id/timeAndPermit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="11:40 사용"
+        android:textSize="13dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="3dp"
+        android:layout_below="@+id/place"/>
+
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="15dp"
+        android:text="3,000"
+        android:textColor="#F44336"
+        android:textSize="23dp" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:src="@drawable/line"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>

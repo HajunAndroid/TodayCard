@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="#ffffff"
+    >
+    <kr.co.hajun.broadcastrecieverpractice1.DonutView
+        android:id="@+id/donut"
+        android:layout_width="@dimen/donut_size"
+        android:layout_height="@dimen/donut_size"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/spendMoney"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="18,000"
+            android:textSize="30dp"
+            android:textColor="#000000"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:text="/"
+            android:textSize="30dp"
+            android:textColor="#000000"/>
+        <TextView
+            android:id="@+id/deadLineMoney"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30,000"
+            android:textSize="30dp"
+            android:textColor="#000000"/>
+    </LinearLayout>
+
+</LinearLayout>

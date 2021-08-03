@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ChangeLimit"
+    android:orientation="vertical"
+    android:background="#ffffff">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/close"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:background="#ffffff"
+            android:onClick="closeBtn"
+            android:src="@drawable/baseline_close_black_24dp" />
+
+        <ImageButton
+            android:id="@+id/done"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:background="#ffffff"
+            android:onClick="doneBtn"
+            android:src="@drawable/baseline_done_black_24dp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="50dp">
+        <TextView
+            android:id="@+id/base1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25dp"
+            android:text="현재한도"
+            android:layout_marginLeft="70dp"/>
+        <TextView
+            android:id="@+id/limit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/base1"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="70dp"
+            android:text="30,000"
+            android:textColor="#000000"
+            android:textSize="25dp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="50dp">
+        <TextView
+            android:id="@+id/base2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25dp"
+            android:text="변경한도"
+            android:layout_marginLeft="70dp"/>
+
+        <EditText
+            android:id="@+id/change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/base2"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="70dp"
+            android:text="30,000"
+            android:textColor="#000000"
+            android:textSize="30dp"
+            android:inputType="number">
+        </EditText>
+    </RelativeLayout>
+</LinearLayout>

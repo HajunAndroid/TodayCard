@@ -118,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
         private String titles[] = new String[]{"오늘","상세내역"/*,"주별","월별"*/};
         public pagerAdapter(FragmentManager fm){
             super(fm);
-            //Log.d("lifecylce","setAdapter");
             TodayFragment todayFragment = new TodayFragment();
             DayFragment dayFragment = new DayFragment();
             Bundle bundle = new Bundle(3);

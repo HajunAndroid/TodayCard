@@ -127,7 +127,7 @@ public class MyIntentService extends IntentService {
         }else{
             builder= new NotificationCompat.Builder(this);
         }
-        builder.setSmallIcon(android.R.drawable.ic_dialog_alert);
+        builder.setSmallIcon(R.drawable.baseline_payment_black_24dp);
         builder.setContentText("당일 사용 한도 "+limit+"을 초과했습니다");
 
         Intent intentToActivity = new Intent(this, MainActivity.class);

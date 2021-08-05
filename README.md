@@ -21,12 +21,15 @@
 ### 1-1)Activity
 ![image3](https://user-images.githubusercontent.com/87768226/128278498-9a6d9e47-2c53-4d80-9a55-df28f923ff97.PNG)
 ##### -SplashActivity에서 finsh()를 하고 MainActivity로 startActivity() 호출(Activity Task 관리)
+###### (부연설명: Activity는 Task에 쌓이기 때문에 종료하지 않으면 back버튼으로 다시 나오기 때문)
 ##### -AppBarLayout에 Toolbar와 TabLayout을 배치
 ##### -사용자 터치에 의한 알림 on/off 상태 SharedPreferences에 저장
 ##### -Menu의 검색/한도변경/직접입력은 새 Activity로 작업(Lifecycle을 활용한 화면 갱신을 위해)
+###### (부연 설명: 다른 activity에서 현재 activity로 돌아오면 onRestart()->onStart()->onResume() 호출됩니다. 다른 activity에서는 한도 변경, 직접입력 즉, DB의 데이터가 변경되는 작업을 합니다. 이를 반영하기 위해 activity 생명주기를 활용해 view를 다시 그립니다.)
 ##### -‘오늘’과 ‘상세내역’은 Fragment로 구현(ViewPager와 TabLayout 함께 사용)
 ##### -MainActivity에서 각 Fragment에 Bundle을 사용해 날짜 데이터 전달
 ##### -MainActivity의 Activity Task 관리 위해 singleTop 설정/onNewIntent() 구현
+###### (부연 설명: 앱의 MainActivity 사용 중에 알림이 왔고 이때 사용자가 알림을 터치하는 경우 MainActivity 2개가 task에 존재하게 됩니다(activity는 singleton이 아니기 때문). 따라서 알림 터치 후 새 activity가 보이고 이후 사용자가 back 버튼 누르면 이전 activity 다시 보이기 때문에 이를 방지하고자 위처럼 설정합니다.)
 ### 1-2)
 ![image5](https://user-images.githubusercontent.com/87768226/128278831-2e710d17-53c1-4855-b1f8-500d3be932cf.PNG)
 ##### -SearchActivity: DatePickerDialog로 날짜 입력, DB 조회 후 View에 출력
@@ -36,6 +39,7 @@
 ![image4](https://user-images.githubusercontent.com/87768226/128278681-3fb80d47-4934-4ecb-a2e9-ff4c53530ad8.PNG)
 ##### -Context 사용 위해 onAttach()에서 획득
 ##### -DB에서 데이터를 찾아 View에 그리는 작업은 onStart()에서 작업(Lifecycle을 활용한 화면 갱신을 위해)
+###### (부연 설명: 한도 변경, 직접 입력을 위해 다른 Activity로 갔다가 다시 돌아오는 경우 수정된 DB를 View에 반영해야합니다. 이때 fragment 생명주기가 onStart()부터 다시 시작됨을 이용합니다.)
 ##### -Fragement(1): CustomView로 사용자에 도넛 모양의 View를 제공
 ##### -Fragment(2): RecyclerView 사용 및 onClick()을 달아서 삭제 여부 묻는 AlterDialog 띄움
 ##### -AlterDialog의 ‘네’ 버튼 클릭 시 MainActivity 갱신

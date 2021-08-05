@@ -55,3 +55,9 @@
 ##### -SMS 내용이 승인이고 당일 사용한도 초과라면 Notification 띄움
 ##### -targetSDKVersion은 30, minSDKVersion은 29이기 때문에 NotificationChannel 설정
 ##### -Notification에 PendingIntent를 설정해 클릭 시 MainActivity 실행
+### 5) Others  
+##### Permission  
+##### uses-permission android:name="android.permission.RECEIVE_SMS"   
+| |ProtectionLevel|사용자에게 권한 부여 요청|
+|------|---|---|
+|RECEIVE_SMS|Dangerous|O|

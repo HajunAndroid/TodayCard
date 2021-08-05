@@ -45,7 +45,7 @@
 ##### -AlterDialog의 ‘네’ 버튼 클릭 시 MainActivity 갱신
 ### 3) BroadcastReciever
 ![image6](https://user-images.githubusercontent.com/87768226/128278980-a078d523-2c7a-4597-9a54-cc180f159022.PNG)
-##### -암시적 호출
+##### -암시적 호출 (System에서 발생시키는 Intent이기 때문에 BroadcastReciever의 백그라운드 실행 제한에 해당하지 않습니다.)
 ![image7](https://user-images.githubusercontent.com/87768226/128279215-6247a0bb-782c-4d3f-8058-6fb01010ffc2.PNG)
 ##### -SMS parsing 후 국민카드 결제 문자라면, 문자 내용을 담은 startService() 호출
 ### 4)Service 및 Notification
@@ -55,6 +55,7 @@
 ##### -SMS 내용이 승인이고 당일 사용한도 초과라면 Notification 띄움
 ##### -targetSDKVersion은 30, minSDKVersion은 29이기 때문에 NotificationChannel 설정
 ##### -Notification에 PendingIntent를 설정해 클릭 시 MainActivity 실행
+##### (SMS Broadcast 수신이기에 앱이 임시 허용 목록이 있습니다. 따라서 백그라운드 서비스 제한 없이 가능합니다.)
 ### 5) Others  
 ##### Permission  
 ##### uses-permission android:name="android.permission.RECEIVE_SMS"   

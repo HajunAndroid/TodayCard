@@ -7,6 +7,7 @@
 ![전체화면](https://user-images.githubusercontent.com/87768226/128277348-0ede9d4e-de88-42cc-b431-7ae63832d431.PNG)
 ### **[사용 핵심 skill 및 지식]** 
 ![이미지2](https://user-images.githubusercontent.com/87768226/128277622-1abe4aa4-7592-41f9-adae-434994b3c0bc.PNG)  
+#### (사용 개념 정리 블로그: https://junnn183.tistory.com/27)
 ### 2. 프로젝트 설명
 ### **[프로젝트명]**
 ##### '오늘의 카드' 안드로이드 앱 개발 프로젝트

@@ -4,7 +4,7 @@
 ### **[오늘의 카드]**
 ##### 국민카드의 유료 SMS 서비스를 분석해 오늘 얼마를 사용했는지 한 눈에 볼 수 있습니다. 또한 당일 사용 한도를 넘기면 경고 알림을 띄웁니다.  
 ### **[Application 화면 설계]**
-![전체화면](https://user-images.githubusercontent.com/87768226/128277348-0ede9d4e-de88-42cc-b431-7ae63832d431.PNG)
+![전체화면](https://user-images.githubusercontent.com/87768226/131626265-6d06f29e-da8e-4ee8-bbf2-08079146b690.png)
 ### **[사용 핵심 skill 및 지식]** 
 ![이미지2](https://user-images.githubusercontent.com/87768226/128277622-1abe4aa4-7592-41f9-adae-434994b3c0bc.PNG)  
 #### (사용 개념 정리 블로그: https://junnn183.tistory.com/27)
@@ -20,7 +20,7 @@
 ### **[상세 업무]**
 ##### Activity/Fragment/BroadcastReciever/Service/Notification
 ### 1-1)Activity
-![image3](https://user-images.githubusercontent.com/87768226/128278498-9a6d9e47-2c53-4d80-9a55-df28f923ff97.PNG)
+![캡처051](https://user-images.githubusercontent.com/87768226/131626474-404ec206-1d8a-4208-82b1-0fc8b67f2c31.PNG)
 ##### -SplashActivity에서 finsh()를 하고 MainActivity로 startActivity() 호출(Activity Task 관리)
 ###### (부연설명: Activity는 Task에 쌓이기 때문에 종료하지 않으면 back버튼으로 다시 나오기 때문)
 ##### -AppBarLayout에 Toolbar와 TabLayout을 배치
@@ -37,7 +37,7 @@
 ##### -ChangeLimitActivity: SharedPreferences로 한도 조회 및 변경
 ##### -PutSpend: 결제 정보 입력 후 DB 저장
 ### 2) Fragment
-![image4](https://user-images.githubusercontent.com/87768226/128278681-3fb80d47-4934-4ecb-a2e9-ff4c53530ad8.PNG)
+![캡처053](https://user-images.githubusercontent.com/87768226/131626523-b6cc8afa-df8d-4d27-a72a-8ebf166ebe31.PNG)
 ##### -Context 사용 위해 onAttach()에서 획득
 ##### -DB에서 데이터를 찾아 View에 그리는 작업은 onStart()에서 작업(Lifecycle을 활용한 화면 갱신을 위해)
 ###### (부연 설명: 한도 변경, 직접 입력을 위해 다른 Activity로 갔다가 다시 돌아오는 경우 수정된 DB를 View에 반영해야합니다. 이때 fragment 생명주기가 onStart()부터 다시 시작됨을 이용합니다.)
@@ -45,7 +45,8 @@
 ##### -Fragment(2): RecyclerView 사용 및 onClick()을 달아서 삭제 여부 묻는 AlterDialog 띄움
 ##### -AlterDialog의 ‘네’ 버튼 클릭 시 MainActivity 갱신
 ### 3) BroadcastReciever
-![image6](https://user-images.githubusercontent.com/87768226/128278980-a078d523-2c7a-4597-9a54-cc180f159022.PNG)
+<img src = "https://user-images.githubusercontent.com/87768226/131626572-634985ea-7f8c-4813-ae64-4d18e97b0330.PNG" width="35%" height="35%">
+
 ##### -암시적 호출 (System에서 발생시키는 Intent이기 때문에 BroadcastReciever의 백그라운드 실행 제한에 해당하지 않습니다.)
 ![image7](https://user-images.githubusercontent.com/87768226/128279215-6247a0bb-782c-4d3f-8058-6fb01010ffc2.PNG)
 ##### -SMS parsing 후 국민카드 결제 문자라면, 문자 내용을 담은 startService() 호출

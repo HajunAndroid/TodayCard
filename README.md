@@ -6,7 +6,7 @@
 ### **[Application 화면 설계]**
 ![전체화면](https://user-images.githubusercontent.com/87768226/131626265-6d06f29e-da8e-4ee8-bbf2-08079146b690.png)
 ### **[사용 핵심 skill 및 지식]** 
-![이미지2](https://user-images.githubusercontent.com/87768226/128277622-1abe4aa4-7592-41f9-adae-434994b3c0bc.PNG)  
+![캡처](https://user-images.githubusercontent.com/87768226/133249763-79aa7c33-289a-49c1-88f8-50e0abd461be.JPG) 
 #### (사용 개념 정리 블로그: https://junnn183.tistory.com/27)
 ### 2. 프로젝트 설명
 ### **[프로젝트명]**

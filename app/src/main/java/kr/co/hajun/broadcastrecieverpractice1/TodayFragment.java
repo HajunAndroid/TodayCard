@@ -19,7 +19,6 @@ import androidx.fragment.app.Fragment;
 
 import java.text.DecimalFormat;
 
-
 public class TodayFragment extends Fragment {
     DonutView donutView;
     TextView spend, deadLine;
@@ -27,6 +26,7 @@ public class TodayFragment extends Fragment {
     int total;
     DecimalFormat df;
     int year, month, day;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

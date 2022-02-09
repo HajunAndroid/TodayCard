@@ -21,9 +21,11 @@ public class ChangeLimit extends AppCompatActivity {
     EditText changeLimit;
     TextView nowLimit;
     SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_change_limit);
         close = findViewById(R.id.close);
         done = findViewById(R.id.done);
@@ -37,6 +39,7 @@ public class ChangeLimit extends AppCompatActivity {
         changeLimit.setText("");
         changeLimit.requestFocus();
     }
+
     public void doneBtn(View view){
         try{
             String str =changeLimit.getText().toString().trim();

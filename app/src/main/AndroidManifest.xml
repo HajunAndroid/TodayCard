@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BroadCastRecieverPractice1">
         <activity android:name=".SplashActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,13 +22,16 @@
         </activity>
         <activity
             android:name=".Search"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:exported="true"/>
         <activity
             android:name=".PutSpend"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:exported="true"/>
         <activity
             android:name=".ChangeLimit"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:exported="true"/>
 
         <service
             android:name=".MyIntentService"

@@ -6,12 +6,14 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,6 +41,11 @@ public class DayFragment extends Fragment {
         mContext =context;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return (RecyclerView)inflater.inflate(R.layout.fragment_day, container, false);
@@ -50,6 +57,7 @@ public class DayFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView);
     }
 
+
     @Override
     public void onStart() {
         super.onStart();
@@ -58,9 +66,7 @@ public class DayFragment extends Fragment {
         month = bundle.getInt("month");
         day = bundle.getInt("day");
         df= new DecimalFormat("###,###");
-
         list = new ArrayList<>();
-
         helper = new DBHelper(mContext);
         db= helper.getWritableDatabase();
         Cursor c = db.rawQuery("select place, price, hour, minute, permit from tb_card where year = ? and month = ? and date = ?", new String[] { year+"",month+"",day+"" });
@@ -160,7 +166,6 @@ public class DayFragment extends Fragment {
     public void onStop() {
         super.onStop();
         db.close();
-
     }
 
     public void reFresh(){

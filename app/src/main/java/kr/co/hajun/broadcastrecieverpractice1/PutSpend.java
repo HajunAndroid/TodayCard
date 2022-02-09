@@ -16,14 +16,14 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 public class PutSpend extends AppCompatActivity {
-    EditText etWhere, etPrice;
-    TextView tDay;
 
     Calendar calendar = Calendar.getInstance();
     int nYear = calendar.get(Calendar.YEAR);
     int nMonth = calendar.get(Calendar.MONTH)+1;
     int nDay = calendar.get(Calendar.DAY_OF_MONTH);
 
+    EditText etWhere, etPrice;
+    TextView tDay;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,17 +50,17 @@ public class PutSpend extends AppCompatActivity {
     public void btnDone(View view){
         try{
             String where = etWhere.getText().toString();
+            String str =etPrice.getText().toString().trim();
             String when = tDay.getText().toString();
             if(where.equals("") || when.equals("")) {
                 Toast.makeText(this, "입력을 완료해주세요", Toast.LENGTH_SHORT).show();
                 return;
             }
-            String str =etPrice.getText().toString().trim();
             int rt = Integer.parseInt(str);
-
             DBHelper helper = new DBHelper(this);
             SQLiteDatabase db = helper.getWritableDatabase();
-            db.execSQL("insert into tb_card(year, month, date, hour, minute, place, price, permit) values(?,?,?,?,?,?,?,?)",
+            db.execSQL("insert into tb_card(year, month, date, hour, minute, place, price, permit) " +
+                            "values(?,?,?,?,?,?,?,?)",
                     new String[]{nYear+"", nMonth+"", nDay+"", "-", "-", where, rt+"", "승인"});
             db.close();
             finish();

@@ -17,6 +17,7 @@ public class DonutView extends View {
     int textSize;
     int width;
     int height;
+
     public DonutView(Context context){
         super(context);
         this.context=context;

@@ -18,6 +18,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -31,8 +32,8 @@ public class DayFragment extends Fragment {
     Context mContext;
     RecyclerView recyclerView;
     String place, price, hour, minute;
-    DBHelper helper;
-    SQLiteDatabase db;
+    //DBHelper helper;
+    //SQLiteDatabase db;
     List<HashMap<String,String>> list;
 
     @Override
@@ -67,10 +68,40 @@ public class DayFragment extends Fragment {
         day = bundle.getInt("day");
         df= new DecimalFormat("###,###");
         list = new ArrayList<>();
-        helper = new DBHelper(mContext);
-        db= helper.getWritableDatabase();
-        Cursor c = db.rawQuery("select place, price, hour, minute, permit from tb_card where year = ? and month = ? and date = ?", new String[] { year+"",month+"",day+"" });
+        //helper = new DBHelper(mContext);
+        //db= helper.getWritableDatabase();
+        //Cursor c = db.rawQuery("select place, price, hour, minute, permit from tb_card where year = ? and month = ? and date = ?", new String[] { year+"",month+"",day+"" });
 
+        AppDatabase db = Room.databaseBuilder(mContext,
+                AppDatabase.class, "TodayCardDB").allowMainThreadQueries().build();
+        PayCardDAO payCardDAO = db.payCardDAO();
+        PayCashDAO payCashDAO = db.payCashDAO();
+
+        String s = year+"-"+month+"-"+day;
+        List<PayCard> payCardList = payCardDAO.selectPickedDay(s);
+        List<PayCash> payCashList = payCashDAO.selectPickedDay(s);
+
+        for(int i=0;i<payCardList.size();i++){
+            HashMap<String,String> map = new HashMap<>();
+            String[] times = payCardList.get(i).getCreated_time().split("-");
+            map.put("place",payCardList.get(i).getPlace());
+            map.put("price",payCardList.get(i).getPrice()+"");
+            map.put("hour",times[0]);
+            map.put("minute",times[1]);
+            map.put("permit",payCardList.get(i).getPermit());
+            list.add(map);
+        }
+        for(int i=0;i<payCashList.size();i++){
+            HashMap<String,String> map = new HashMap<>();
+            map.put("place",payCashList.get(i).getPlace());
+            map.put("price",payCashList.get(i).getPrice()+"");
+            map.put("hour","-");
+            map.put("minute","-");
+            map.put("permit",payCashList.get(i).getPermit());
+            list.add(map);
+        }
+
+        /*
         while(c.moveToNext()){
             HashMap<String,String> map = new HashMap<>();
             map.put("place",c.getString(0));
@@ -80,6 +111,7 @@ public class DayFragment extends Fragment {
             map.put("permit",c.getString(4));
             list.add(map);
         }
+        */
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setAdapter(new MyAdapter(list));
@@ -134,6 +166,7 @@ public class DayFragment extends Fragment {
                         HashMap<String,String> hashMap = list.get(pos);
                         place = hashMap.get("place");
                         price = hashMap.get("price");
+                        hour = hashMap.get("hour");
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     builder.setIcon(android.R.drawable.ic_dialog_alert);
@@ -151,12 +184,30 @@ public class DayFragment extends Fragment {
     DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialogInterface, int i) {
+
+            AppDatabase db = Room.databaseBuilder(mContext,
+                    AppDatabase.class, "TodayCardDB").allowMainThreadQueries().build();
+            PayCardDAO payCardDAO = db.payCardDAO();
+            PayCashDAO payCashDAO = db.payCashDAO();
+            DailySpendDAO dailySpendDAO = db.dailySpendDAO();
+
+            String s = year+"-"+month+"-"+day;
+            if(!hour.equals("-")){
+                payCardDAO.deletePayCard(s,Integer.parseInt(price),place);
+            }else{
+                payCashDAO.deletePayCash(s,Integer.parseInt(price),place);
+            }
+            List<DailySpend> dailySpendList = dailySpendDAO.selectTotal(s);
+            int nTotal = dailySpendList.get(0).getTotal();
+            nTotal -= Integer.parseInt(price);
+            dailySpendDAO.updateTotal(nTotal,s);
+            /*
             Cursor c = db.rawQuery("select _id from tb_card where year =? and month = ? and date =? and place = ? and price =? ",
                     new String[]{year+"",month+"",day+"",place,price});
             if (c.moveToLast()){
                 String id = c.getString(0);
                 db.execSQL("Delete from tb_card where _id = "+id);
-            }
+            }*/
             reFresh();
             Toast.makeText(mContext,"삭제가 완료되었습니다.",Toast.LENGTH_SHORT).show();
         }
@@ -165,7 +216,7 @@ public class DayFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        db.close();
+        //db.close();
     }
 
     public void reFresh(){

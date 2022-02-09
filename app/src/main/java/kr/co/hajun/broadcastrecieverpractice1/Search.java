@@ -1,6 +1,7 @@
 package kr.co.hajun.broadcastrecieverpractice1;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.app.DatePickerDialog;
 import android.database.Cursor;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.List;
 
 public class Search extends AppCompatActivity {
 
@@ -55,13 +57,22 @@ public class Search extends AppCompatActivity {
             return;
         }
         DecimalFormat df = new DecimalFormat("###,###");
-        DBHelper helper= new DBHelper(this);
+
+        AppDatabase db = Room.databaseBuilder(this,
+                AppDatabase.class, "TodayCardDB").allowMainThreadQueries().build();
+        DailySpendDAO dailySpendDAO = db.dailySpendDAO();
+        String s = startYear+"-"+startMonth+"-"+startDay;
+        List<DailySpend> list = dailySpendDAO.selectTotal(s);
+        if(list.size()!=0)
+            total += list.get(0).getTotal();
+        /*DBHelper helper= new DBHelper(this);
         SQLiteDatabase db = helper.getWritableDatabase();
         Cursor c = db.rawQuery("select price from tb_card where year = ? and month = ? and date = ?",
                 new String[]{startYear+"",startMonth+"",startDay+""});
         while(c.moveToNext()){
             total += Integer.parseInt(c.getString(0));
-        }
+        }*/
+
         totalPrice.setText(df.format(total)+"원");
         db.close();
     }

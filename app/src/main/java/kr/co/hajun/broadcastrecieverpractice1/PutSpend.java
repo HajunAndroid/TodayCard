@@ -1,6 +1,7 @@
 package kr.co.hajun.broadcastrecieverpractice1;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.List;
 
 public class PutSpend extends AppCompatActivity {
 
@@ -56,13 +58,33 @@ public class PutSpend extends AppCompatActivity {
                 Toast.makeText(this, "입력을 완료해주세요", Toast.LENGTH_SHORT).show();
                 return;
             }
-            int rt = Integer.parseInt(str);
+            //int rt = Integer.parseInt(str);
+
+            AppDatabase db = Room.databaseBuilder(this,
+                    AppDatabase.class, "TodayCardDB").allowMainThreadQueries().build();
+            DailySpendDAO dailySpendDAO = db.dailySpendDAO();
+            PayCashDAO payCashDAO = db.payCashDAO();
+
+            String s = nYear+"-"+nMonth+"-"+nDay;
+            List<DailySpend> dailySpendList = dailySpendDAO.selectTotal(s);
+            if(dailySpendList.size()==0){
+                dailySpendDAO.insertDailySpend(new DailySpend(s,0));
+            }
+            List<DailySpend> list = dailySpendDAO.selectTotal(s);
+            int currentTotal = list.get(0).getTotal();
+            currentTotal+=Integer.parseInt(str);
+            dailySpendDAO.updateTotal(currentTotal,s);
+
+            payCashDAO.insertPayCash(new PayCash(s,Integer.parseInt(str),where,"승인"));
+
+            /*
             DBHelper helper = new DBHelper(this);
             SQLiteDatabase db = helper.getWritableDatabase();
             db.execSQL("insert into tb_card(year, month, date, hour, minute, place, price, permit) " +
                             "values(?,?,?,?,?,?,?,?)",
                     new String[]{nYear+"", nMonth+"", nDay+"", "-", "-", where, rt+"", "승인"});
             db.close();
+            */
             finish();
         }catch (NumberFormatException e){
             Toast.makeText(this,"사용금액에 숫자만 입력하세요",Toast.LENGTH_SHORT).show();

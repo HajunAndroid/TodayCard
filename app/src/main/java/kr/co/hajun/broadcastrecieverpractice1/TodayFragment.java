@@ -60,7 +60,6 @@ public class TodayFragment extends Fragment {
         month = bundle.getInt("month");
         day = bundle.getInt("day");
 
-
         total = 0;
         /*
         DBHelper helper = new DBHelper(mContext);

@@ -8,14 +8,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.room.Room;
 
 import java.text.DecimalFormat;
@@ -71,24 +67,22 @@ public class MyIntentService extends IntentService {
             parsePlace(contentParse[5]);
 
             Log.d("tagtag","1");
-            List<Card> cardList = cardDAO.getPickId(card_name,card_id);
+            List<Card> cardList = cardDAO.selectCard(card_name,card_id);
             if(cardList.size()==0){
                 cardDAO.insertCard(new Card(card_id,card_name));
             }
 
             created_date = year+"-"+month+"-"+date;
             created_time = hour+"-"+minute;
+
             List<DailySpend> dailySpendList = dailySpendDAO.selectTotal(created_date);
             if(dailySpendList.size()==0){
-                dailySpendDAO.insertDailySpend(new DailySpend(created_date,0));
+                dailySpendDAO.insertTotal(new DailySpend(created_date,0));
             }
-            List<DailySpend> list = dailySpendDAO.selectTotal(created_date);
-            int currentTotal = list.get(0).getTotal();
-            currentTotal+=Integer.parseInt(price);
-            dailySpendDAO.updateTotal(currentTotal,created_date);
+            dailySpendDAO.updateTotal(Integer.parseInt(price),created_date);
+            payCardDAO.insertPayCard(new PayCard(created_date,created_time,
+                    Integer.parseInt(price),place,permit,card_id));
 
-            payCardDAO.insertPayCard(new PayCard(created_date,created_time,Integer.parseInt(price),place,permit,card_id));
-            Log.d("tagtag","2");
             //db.execSQL("insert into tb_card(year, month, date, hour, minute, place, price, permit) values(?,?,?,?,?,?,?,?)",
             //        new String[]{year, month, date, hour, minute, place, price, permit});
 
@@ -103,10 +97,8 @@ public class MyIntentService extends IntentService {
             permit = "승인취소";
 
             created_date = year+"-"+month+"-"+date;
-            List<DailySpend> list = dailySpendDAO.selectTotal(created_date);
-            int currentTotal = list.get(0).getTotal();
-            currentTotal-=Integer.parseInt(price);
-            dailySpendDAO.updateTotal(currentTotal,created_date);
+
+            dailySpendDAO.updateTotal(Integer.parseInt(price)*(-1),created_date);
             payCardDAO.deletePayCard(created_date,Integer.parseInt(price),place);
 
             /*

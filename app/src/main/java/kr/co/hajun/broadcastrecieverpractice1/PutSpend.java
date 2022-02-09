@@ -4,13 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import android.app.DatePickerDialog;
-import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,19 +59,17 @@ public class PutSpend extends AppCompatActivity {
 
             AppDatabase db = Room.databaseBuilder(this,
                     AppDatabase.class, "TodayCardDB").allowMainThreadQueries().build();
+
             DailySpendDAO dailySpendDAO = db.dailySpendDAO();
             PayCashDAO payCashDAO = db.payCashDAO();
 
             String s = nYear+"-"+nMonth+"-"+nDay;
+
             List<DailySpend> dailySpendList = dailySpendDAO.selectTotal(s);
             if(dailySpendList.size()==0){
-                dailySpendDAO.insertDailySpend(new DailySpend(s,0));
+                dailySpendDAO.insertTotal(new DailySpend(s,0));
             }
-            List<DailySpend> list = dailySpendDAO.selectTotal(s);
-            int currentTotal = list.get(0).getTotal();
-            currentTotal+=Integer.parseInt(str);
-            dailySpendDAO.updateTotal(currentTotal,s);
-
+            dailySpendDAO.updateTotal(Integer.parseInt(str),s);
             payCashDAO.insertPayCash(new PayCash(s,Integer.parseInt(str),where,"승인"));
 
             /*

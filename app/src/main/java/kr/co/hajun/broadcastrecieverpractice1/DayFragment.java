@@ -3,17 +3,13 @@ package kr.co.hajun.broadcastrecieverpractice1;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -78,8 +74,8 @@ public class DayFragment extends Fragment {
         PayCashDAO payCashDAO = db.payCashDAO();
 
         String s = year+"-"+month+"-"+day;
-        List<PayCard> payCardList = payCardDAO.selectPickedDay(s);
-        List<PayCash> payCashList = payCashDAO.selectPickedDay(s);
+        List<PayCard> payCardList = payCardDAO.selectPayCard(s);
+        List<PayCash> payCashList = payCashDAO.selectPayCash(s);
 
         for(int i=0;i<payCardList.size();i++){
             HashMap<String,String> map = new HashMap<>();
@@ -192,15 +188,14 @@ public class DayFragment extends Fragment {
             DailySpendDAO dailySpendDAO = db.dailySpendDAO();
 
             String s = year+"-"+month+"-"+day;
+
+            dailySpendDAO.updateTotal(Integer.parseInt(price)*(-1),s);
             if(!hour.equals("-")){
                 payCardDAO.deletePayCard(s,Integer.parseInt(price),place);
             }else{
                 payCashDAO.deletePayCash(s,Integer.parseInt(price),place);
             }
-            List<DailySpend> dailySpendList = dailySpendDAO.selectTotal(s);
-            int nTotal = dailySpendList.get(0).getTotal();
-            nTotal -= Integer.parseInt(price);
-            dailySpendDAO.updateTotal(nTotal,s);
+
             /*
             Cursor c = db.rawQuery("select _id from tb_card where year =? and month = ? and date =? and place = ? and price =? ",
                     new String[]{year+"",month+"",day+"",place,price});

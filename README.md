@@ -1,4 +1,4 @@
-# TodayCardProject
+# TodayCard
 "오늘의 카드" Android Application
 ### 1. 전체 요약
 ### **[오늘의 카드]**

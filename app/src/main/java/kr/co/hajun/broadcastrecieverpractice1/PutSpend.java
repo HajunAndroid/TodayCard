@@ -63,14 +63,18 @@ public class PutSpend extends AppCompatActivity {
             DailySpendDAO dailySpendDAO = db.dailySpendDAO();
             PayCashDAO payCashDAO = db.payCashDAO();
 
-            String s = nYear+"-"+nMonth+"-"+nDay;
-
-            List<DailySpend> dailySpendList = dailySpendDAO.selectTotal(s);
+            String created_date = nYear+"-"+nMonth+"-"+nDay;
+            String price = str; String place = where;
+            /*
+            List<DailySpend> dailySpendList = dailySpendDAO.selectTotal(created_date);
             if(dailySpendList.size()==0){
-                dailySpendDAO.insertTotal(new DailySpend(s,0));
+                dailySpendDAO.insertTotal(new DailySpend(created_date,0));
             }
-            dailySpendDAO.updateTotal(Integer.parseInt(str),s);
-            payCashDAO.insertPayCash(new PayCash(s,Integer.parseInt(str),where,"승인"));
+            dailySpendDAO.updateTotal(Integer.parseInt(str),created_date);
+            payCashDAO.insertPayCash(new PayCash(created_date,Integer.parseInt(str),where,"승인"));
+            */
+
+            payCashDAO.insert(created_date,Integer.parseInt(price),place);
 
             /*
             DBHelper helper = new DBHelper(this);

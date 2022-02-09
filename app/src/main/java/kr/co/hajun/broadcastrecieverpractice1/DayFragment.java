@@ -187,13 +187,15 @@ public class DayFragment extends Fragment {
             PayCashDAO payCashDAO = db.payCashDAO();
             DailySpendDAO dailySpendDAO = db.dailySpendDAO();
 
-            String s = year+"-"+month+"-"+day;
+            String created_date = year+"-"+month+"-"+day;
 
-            dailySpendDAO.updateTotal(Integer.parseInt(price)*(-1),s);
+            //dailySpendDAO.updateTotal(Integer.parseInt(price)*(-1),created_date);
+                    //payCardDAO.deletePayCard(created_date,Integer.parseInt(price),place);
+
             if(!hour.equals("-")){
-                payCardDAO.deletePayCard(s,Integer.parseInt(price),place);
+                payCardDAO.delete(created_date,Integer.parseInt(price),place);
             }else{
-                payCashDAO.deletePayCash(s,Integer.parseInt(price),place);
+                payCashDAO.delete(created_date,Integer.parseInt(price),place);
             }
 
             /*

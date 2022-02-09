@@ -75,6 +75,7 @@ public class MyIntentService extends IntentService {
             created_date = year+"-"+month+"-"+date;
             created_time = hour+"-"+minute;
 
+            /*
             List<DailySpend> dailySpendList = dailySpendDAO.selectTotal(created_date);
             if(dailySpendList.size()==0){
                 dailySpendDAO.insertTotal(new DailySpend(created_date,0));
@@ -82,6 +83,10 @@ public class MyIntentService extends IntentService {
             dailySpendDAO.updateTotal(Integer.parseInt(price),created_date);
             payCardDAO.insertPayCard(new PayCard(created_date,created_time,
                     Integer.parseInt(price),place,permit,card_id));
+             */
+
+            payCardDAO.insert(created_date,created_time,
+                    Integer.parseInt(price),place,permit,card_id);
 
             //db.execSQL("insert into tb_card(year, month, date, hour, minute, place, price, permit) values(?,?,?,?,?,?,?,?)",
             //        new String[]{year, month, date, hour, minute, place, price, permit});
@@ -98,8 +103,10 @@ public class MyIntentService extends IntentService {
 
             created_date = year+"-"+month+"-"+date;
 
-            dailySpendDAO.updateTotal(Integer.parseInt(price)*(-1),created_date);
-            payCardDAO.deletePayCard(created_date,Integer.parseInt(price),place);
+            payCardDAO.delete(created_date,Integer.parseInt(price),place);
+
+            //dailySpendDAO.updateTotal(Integer.parseInt(price)*(-1),created_date);
+            //payCardDAO.deletePayCard(created_date,Integer.parseInt(price),place);
 
             /*
             Cursor c = db.rawQuery("select _id from tb_card where place = ? and price = ?",

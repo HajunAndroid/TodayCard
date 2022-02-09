@@ -16,15 +16,25 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.room.Room;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class MyIntentService extends IntentService {
+    CardDAO cardDAO;
+    DailySpendDAO dailySpendDAO;
+    PayCardDAO payCardDAO;
+
     String year, month, date, hour, minute, price, place, permit;
+    String card_name, card_id;
+
+    String created_date;
+    String created_time;
 
     public MyIntentService() {
         super("MyIntentService");
@@ -38,8 +48,14 @@ public class MyIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        DBHelper helper = new DBHelper(this);
-        SQLiteDatabase db = helper.getWritableDatabase();
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "TodayCardDB").build();
+        cardDAO = db.cardDAO();
+        dailySpendDAO = db.dailySpendDAO();
+        payCardDAO = db.payCardDAO();
+
+        //DBHelper helper = new DBHelper(this);
+        //SQLiteDatabase db = helper.getWritableDatabase();
 
         String content = intent.getStringExtra("Content");
         String[] contentParse = content.split("\n");
@@ -49,15 +65,36 @@ public class MyIntentService extends IntentService {
         year = yearFormat.format(currentTime);
 
         if(contentParse.length==6 && contentParse[5].contains("사용")){
+            parseCard(contentParse[1]);
             parseDate(contentParse[3]);
             parsePrice(contentParse[4]);
             parsePlace(contentParse[5]);
-            db.execSQL("insert into tb_card(year, month, date, hour, minute, place, price, permit) values(?,?,?,?,?,?,?,?)",
-                    new String[]{year, month, date, hour, minute, place, price, permit});
+
+            Log.d("tagtag","1");
+            List<Card> cardList = cardDAO.getPickId(card_name,card_id);
+            if(cardList.size()==0){
+                cardDAO.insertCard(new Card(card_id,card_name));
+            }
+
+            created_date = year+"-"+month+"-"+date;
+            created_time = hour+"-"+minute;
+            List<DailySpend> dailySpendList = dailySpendDAO.selectTotal(created_date);
+            if(dailySpendList.size()==0){
+                dailySpendDAO.insertDailySpend(new DailySpend(created_date,0));
+            }
+            List<DailySpend> list = dailySpendDAO.selectTotal(created_date);
+            int currentTotal = list.get(0).getTotal();
+            currentTotal+=Integer.parseInt(price);
+            dailySpendDAO.updateTotal(currentTotal,created_date);
+
+            payCardDAO.insertPayCard(new PayCard(created_date,created_time,Integer.parseInt(price),place,permit,card_id));
+            Log.d("tagtag","2");
+            //db.execSQL("insert into tb_card(year, month, date, hour, minute, place, price, permit) values(?,?,?,?,?,?,?,?)",
+            //        new String[]{year, month, date, hour, minute, place, price, permit});
 
             SharedPreferences sharedPreferencesNotification = getSharedPreferences("my_notification",MODE_PRIVATE);
             if(sharedPreferencesNotification.getString("noti","on").equals("on")) {
-                checkingNotification(db);
+                checkingNotification(/*db*/);
             }
         }else if(contentParse.length==7 && contentParse[6].contains("승인취소")){
             parseDate(contentParse[3]);
@@ -65,14 +102,29 @@ public class MyIntentService extends IntentService {
             place = contentParse[5];
             permit = "승인취소";
 
+            created_date = year+"-"+month+"-"+date;
+            List<DailySpend> list = dailySpendDAO.selectTotal(created_date);
+            int currentTotal = list.get(0).getTotal();
+            currentTotal-=Integer.parseInt(price);
+            dailySpendDAO.updateTotal(currentTotal,created_date);
+            payCardDAO.deletePayCard(created_date,Integer.parseInt(price),place);
+
+            /*
             Cursor c = db.rawQuery("select _id from tb_card where place = ? and price = ?",
                     new String[] { place, price });
             if (c.moveToLast()){
                 String id = c.getString(0);
                 db.execSQL("Delete from tb_card where _id = "+id);
-            }
+            }*/
         }
-        db.close();
+        //db.close();
+    }
+
+    public void parseCard(String s){
+        card_name = "KB국민체크";
+        for(int i=7;i<=10;i++){
+            card_id+=s.charAt(i);
+        }
     }
 
     public void parsePrice(String s){
@@ -103,14 +155,16 @@ public class MyIntentService extends IntentService {
         permit = "승인";
     }
 
-    public void checkingNotification(SQLiteDatabase db){
-        int total = 0;
+    public void checkingNotification(/*SQLiteDatabase db*/){
+        /*int total = 0;
         Cursor c = db.rawQuery("select price from tb_card where year = ? and month = ? and date = ?",
                 new String[] {year, month, date});
         while(c.moveToNext()){
             String price = c.getString(0);
             total += Integer.parseInt(price);
-        }
+        }*/
+        List<DailySpend> list = dailySpendDAO.selectTotal(created_date);
+        int total = list.get(0).getTotal();
         SharedPreferences sharedPreferences = getSharedPreferences("spendLimit", MODE_PRIVATE);
         int limit = sharedPreferences.getInt("limit", 30000);
         if (total > limit) {

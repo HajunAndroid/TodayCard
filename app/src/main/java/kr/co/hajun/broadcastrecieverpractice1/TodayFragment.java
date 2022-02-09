@@ -16,8 +16,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.room.Room;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
 public class TodayFragment extends Fragment {
     DonutView donutView;
@@ -58,17 +60,27 @@ public class TodayFragment extends Fragment {
         month = bundle.getInt("month");
         day = bundle.getInt("day");
 
+
         total = 0;
+        /*
         DBHelper helper = new DBHelper(mContext);
         SQLiteDatabase db= helper.getWritableDatabase();
         Cursor c = db.rawQuery("select price from tb_card where year = ? and month = ? and date = ?", new String[] { year+"",month+"",day+"" });
         while(c.moveToNext()){
             total += Integer.parseInt(c.getString(0));
-        }
+        }*/
+        AppDatabase db = Room.databaseBuilder(mContext,
+                AppDatabase.class, "TodayCardDB").allowMainThreadQueries().build();
+        DailySpendDAO dailySpendDAO = db.dailySpendDAO();
+        String s = year+"-"+month+"-"+day;
+        Log.d("tagtag",s);
+        List<DailySpend> list = dailySpendDAO.selectTotal(s);
+        if(list.size()!=0)
+            total += list.get(0).getTotal();
         df = new DecimalFormat("###,###");
         spend.setText(df.format(total));
 
-        db.close();
+        //db.close();
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("spendLimit",Context.MODE_PRIVATE);
         int now = sharedPreferences.getInt("limit",30000);

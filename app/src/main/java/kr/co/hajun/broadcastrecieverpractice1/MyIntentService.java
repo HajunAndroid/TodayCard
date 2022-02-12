@@ -14,6 +14,8 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 import androidx.room.Room;
 
+import com.amplitude.api.Amplitude;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -43,6 +45,9 @@ public class MyIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+
+        Amplitude.getInstance().initialize(this, "45b00de2cf11098cf68104782fcb322a").enableForegroundTracking(getApplication());
+        Amplitude.getInstance().logEvent("get__SMS");
 
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "TodayCardDB").build();
@@ -116,6 +121,10 @@ public class MyIntentService extends IntentService {
                 db.execSQL("Delete from tb_card where _id = "+id);
             }*/
         }
+
+        Amplitude.getInstance().initialize(this, "45b00de2cf11098cf68104782fcb322a").enableForegroundTracking(getApplication());
+        Amplitude.getInstance().logEvent("complete__SMS");
+
         //db.close();
     }
 
@@ -178,6 +187,10 @@ public class MyIntentService extends IntentService {
     }
 
     public void callNotification(int limit, int total){
+
+        Amplitude.getInstance().initialize(this, "45b00de2cf11098cf68104782fcb322a").enableForegroundTracking(getApplication());
+        Amplitude.getInstance().logEvent("get__alert_limit");
+
         NotificationManager notificationManager=(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder= null;
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){

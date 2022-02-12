@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import com.amplitude.api.Amplitude;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,6 +60,10 @@ public class DayFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        Amplitude.getInstance().initialize(mContext, "45b00de2cf11098cf68104782fcb322a").enableForegroundTracking(getActivity().getApplication());
+        Amplitude.getInstance().logEvent("enter__show_list");
+
         Bundle bundle = getArguments();
         year = bundle.getInt("year");
         month = bundle.getInt("month");
@@ -157,6 +163,10 @@ public class DayFragment extends Fragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                    Amplitude.getInstance().initialize(mContext, "45b00de2cf11098cf68104782fcb322a").enableForegroundTracking(getActivity().getApplication());
+                    Amplitude.getInstance().logEvent("click__show_list");
+
                     int pos = getAdapterPosition();
                     if( pos != RecyclerView.NO_POSITION){
                         HashMap<String,String> hashMap = list.get(pos);
@@ -180,6 +190,9 @@ public class DayFragment extends Fragment {
     DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialogInterface, int i) {
+
+            Amplitude.getInstance().initialize(mContext, "45b00de2cf11098cf68104782fcb322a").enableForegroundTracking(getActivity().getApplication());
+            Amplitude.getInstance().logEvent("click__delete_history");
 
             AppDatabase db = Room.databaseBuilder(mContext,
                     AppDatabase.class, "TodayCardDB").allowMainThreadQueries().build();
@@ -205,7 +218,12 @@ public class DayFragment extends Fragment {
                 String id = c.getString(0);
                 db.execSQL("Delete from tb_card where _id = "+id);
             }*/
+
+            Amplitude.getInstance().initialize(mContext, "45b00de2cf11098cf68104782fcb322a").enableForegroundTracking(getActivity().getApplication());
+            Amplitude.getInstance().logEvent("complete__delete_history");
+
             reFresh();
+
             Toast.makeText(mContext,"삭제가 완료되었습니다.",Toast.LENGTH_SHORT).show();
         }
     };

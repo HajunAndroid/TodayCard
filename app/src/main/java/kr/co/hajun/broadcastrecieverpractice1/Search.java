@@ -12,6 +12,8 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amplitude.api.Amplitude;
+
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -31,8 +33,11 @@ public class Search extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         textStart = findViewById(R.id.spendWhenStart);
         totalPrice = findViewById(R.id.totalPrice);
-    }
 
+        Amplitude.getInstance().initialize(this, "45b00de2cf11098cf68104782fcb322a")
+                .enableForegroundTracking(getApplication());
+        Amplitude.getInstance().logEvent("enter__search_total");
+    }
     public void startDay(View view){
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -51,6 +56,8 @@ public class Search extends AppCompatActivity {
     }
 
     public void btnSearch(View view){
+        Amplitude.getInstance().logEvent("click__search_total");
+
         int total = 0;
         if(textStart.getText().equals("")){
             Toast.makeText(this,"날짜를 입력하세요",Toast.LENGTH_SHORT).show();

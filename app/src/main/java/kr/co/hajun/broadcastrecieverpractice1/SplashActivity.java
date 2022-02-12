@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.amplitude.api.Amplitude;
+import com.amplitude.api.AmplitudeClient;
+
 public class SplashActivity extends AppCompatActivity {
 
     @Override

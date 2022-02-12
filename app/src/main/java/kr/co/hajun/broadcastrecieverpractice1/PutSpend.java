@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amplitude.api.Amplitude;
+
 import java.util.Calendar;
 import java.util.List;
 
@@ -27,6 +29,10 @@ public class PutSpend extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_put_spend);
+
+        Amplitude.getInstance().initialize(this, "45b00de2cf11098cf68104782fcb322a").enableForegroundTracking(getApplication());
+        Amplitude.getInstance().logEvent("enter__input_self");
+
         etWhere =findViewById(R.id.spendWhere);
         etPrice = findViewById(R.id.spendHowMuch);
         tDay = findViewById(R.id.spendWhen);
@@ -57,6 +63,9 @@ public class PutSpend extends AppCompatActivity {
             }
             //int rt = Integer.parseInt(str);
 
+            Amplitude.getInstance().initialize(this, "45b00de2cf11098cf68104782fcb322a").enableForegroundTracking(getApplication());
+            Amplitude.getInstance().logEvent("click__input_self");
+
             AppDatabase db = Room.databaseBuilder(this,
                     AppDatabase.class, "TodayCardDB").allowMainThreadQueries().build();
 
@@ -84,6 +93,10 @@ public class PutSpend extends AppCompatActivity {
                     new String[]{nYear+"", nMonth+"", nDay+"", "-", "-", where, rt+"", "승인"});
             db.close();
             */
+
+            Amplitude.getInstance().initialize(this, "45b00de2cf11098cf68104782fcb322a").enableForegroundTracking(getApplication());
+            Amplitude.getInstance().logEvent("complete__input_self");
+
             finish();
         }catch (NumberFormatException e){
             Toast.makeText(this,"사용금액에 숫자만 입력하세요",Toast.LENGTH_SHORT).show();

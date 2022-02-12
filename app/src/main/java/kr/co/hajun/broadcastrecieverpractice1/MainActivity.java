@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.amplitude.api.Amplitude;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;

@@ -16,7 +16,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
+
+import com.amplitude.api.Amplitude;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -25,7 +29,7 @@ public class TodayFragment extends Fragment {
     DonutView donutView;
     TextView spend, deadLine;
     Context mContext;
-    int total;
+    int total=0;
     DecimalFormat df;
     int year, month, day;
 
@@ -55,6 +59,10 @@ public class TodayFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        Amplitude.getInstance().initialize(mContext, "45b00de2cf11098cf68104782fcb322a").enableForegroundTracking(getActivity().getApplication());
+        Amplitude.getInstance().logEvent("enter__show_total");
+
         Bundle bundle = getArguments();
         year = bundle.getInt("year");
         month = bundle.getInt("month");

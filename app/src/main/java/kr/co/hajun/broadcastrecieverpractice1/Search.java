@@ -25,7 +25,7 @@ public class Search extends AppCompatActivity {
     int startMonth = calendar.get(Calendar.MONTH)+1;
     int startDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-    TextView textStart,totalPrice;
+    TextView textStart,totalPrice,totalPriceCash;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +33,7 @@ public class Search extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         textStart = findViewById(R.id.spendWhenStart);
         totalPrice = findViewById(R.id.totalPrice);
+        totalPriceCash = findViewById(R.id.totalPrice_cash);
 
         Amplitude.getInstance().initialize(this, "45b00de2cf11098cf68104782fcb322a")
                 .enableForegroundTracking(getApplication());
@@ -72,6 +73,12 @@ public class Search extends AppCompatActivity {
         List<DailySpend> list = dailySpendDAO.selectTotal(s);
         if(list.size()!=0)
             total += list.get(0).getTotal();
+        PayCashDAO payCashDAO = db.payCashDAO();
+        List<PayCash> payCashList = payCashDAO.selectPayCash(s);
+        int cash_total =0;
+        for(int i=0;i<payCashList.size();i++){
+            cash_total +=payCashList.get(i).getPrice();
+        }
         /*DBHelper helper= new DBHelper(this);
         SQLiteDatabase db = helper.getWritableDatabase();
         Cursor c = db.rawQuery("select price from tb_card where year = ? and month = ? and date = ?",
@@ -81,6 +88,7 @@ public class Search extends AppCompatActivity {
         }*/
 
         totalPrice.setText(df.format(total)+"원");
+        totalPriceCash.setText(df.format(cash_total)+"원");
         db.close();
     }
 }
